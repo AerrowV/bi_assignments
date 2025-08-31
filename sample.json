@@ -1,0 +1,902 @@
+[
+  {
+    "id": 1,
+    "product": "Laptop",
+    "price": 1213.91,
+    "category": "Sports"
+  },
+  {
+    "id": 2,
+    "product": "Phone",
+    "price": 1443.02,
+    "category": "Fashion"
+  },
+  {
+    "id": 3,
+    "product": "Shoes",
+    "price": 1630.3,
+    "category": "Electronics"
+  },
+  {
+    "id": 4,
+    "product": "Shoes",
+    "price": 129.46,
+    "category": "Sports"
+  },
+  {
+    "id": 5,
+    "product": "Tablet",
+    "price": 1762.72,
+    "category": "Education"
+  },
+  {
+    "id": 6,
+    "product": "Phone",
+    "price": 1259.15,
+    "category": "Electronics"
+  },
+  {
+    "id": 7,
+    "product": "Phone",
+    "price": 173.52,
+    "category": "Sports"
+  },
+  {
+    "id": 8,
+    "product": "Book",
+    "price": 1564.03,
+    "category": "Fashion"
+  },
+  {
+    "id": 9,
+    "product": "Shoes",
+    "price": 697.42,
+    "category": "Fashion"
+  },
+  {
+    "id": 10,
+    "product": "Tablet",
+    "price": 891.55,
+    "category": "Education"
+  },
+  {
+    "id": 11,
+    "product": "Tablet",
+    "price": 1382.77,
+    "category": "Education"
+  },
+  {
+    "id": 12,
+    "product": "Backpack",
+    "price": 381.85,
+    "category": "Sports"
+  },
+  {
+    "id": 13,
+    "product": "Shoes",
+    "price": 1581.03,
+    "category": "Travel"
+  },
+  {
+    "id": 14,
+    "product": "Backpack",
+    "price": 40.78,
+    "category": "Fashion"
+  },
+  {
+    "id": 15,
+    "product": "Book",
+    "price": 512.32,
+    "category": "Travel"
+  },
+  {
+    "id": 16,
+    "product": "Laptop",
+    "price": 48.48,
+    "category": "Education"
+  },
+  {
+    "id": 17,
+    "product": "Book",
+    "price": 839.57,
+    "category": "Fashion"
+  },
+  {
+    "id": 18,
+    "product": "Backpack",
+    "price": 751.42,
+    "category": "Electronics"
+  },
+  {
+    "id": 19,
+    "product": "Laptop",
+    "price": 1112.33,
+    "category": "Fashion"
+  },
+  {
+    "id": 20,
+    "product": "Laptop",
+    "price": 890.66,
+    "category": "Travel"
+  },
+  {
+    "id": 21,
+    "product": "Phone",
+    "price": 926.25,
+    "category": "Education"
+  },
+  {
+    "id": 22,
+    "product": "Shoes",
+    "price": 1080.67,
+    "category": "Fashion"
+  },
+  {
+    "id": 23,
+    "product": "Headphones",
+    "price": 145.37,
+    "category": "Sports"
+  },
+  {
+    "id": 24,
+    "product": "Backpack",
+    "price": 997.18,
+    "category": "Electronics"
+  },
+  {
+    "id": 25,
+    "product": "Laptop",
+    "price": 1190.02,
+    "category": "Electronics"
+  },
+  {
+    "id": 26,
+    "product": "Tablet",
+    "price": 1403.55,
+    "category": "Travel"
+  },
+  {
+    "id": 27,
+    "product": "Laptop",
+    "price": 1876.56,
+    "category": "Electronics"
+  },
+  {
+    "id": 28,
+    "product": "Shoes",
+    "price": 708.01,
+    "category": "Sports"
+  },
+  {
+    "id": 29,
+    "product": "Book",
+    "price": 1369.62,
+    "category": "Education"
+  },
+  {
+    "id": 30,
+    "product": "Shoes",
+    "price": 1740.65,
+    "category": "Education"
+  },
+  {
+    "id": 31,
+    "product": "Shoes",
+    "price": 730.24,
+    "category": "Fashion"
+  },
+  {
+    "id": 32,
+    "product": "Phone",
+    "price": 1668.98,
+    "category": "Fashion"
+  },
+  {
+    "id": 33,
+    "product": "Tablet",
+    "price": 651.38,
+    "category": "Fashion"
+  },
+  {
+    "id": 34,
+    "product": "Headphones",
+    "price": 1423.05,
+    "category": "Sports"
+  },
+  {
+    "id": 35,
+    "product": "Headphones",
+    "price": 1376.04,
+    "category": "Travel"
+  },
+  {
+    "id": 36,
+    "product": "Backpack",
+    "price": 732.79,
+    "category": "Education"
+  },
+  {
+    "id": 37,
+    "product": "Headphones",
+    "price": 1451.63,
+    "category": "Travel"
+  },
+  {
+    "id": 38,
+    "product": "Backpack",
+    "price": 741.85,
+    "category": "Travel"
+  },
+  {
+    "id": 39,
+    "product": "Headphones",
+    "price": 342.71,
+    "category": "Sports"
+  },
+  {
+    "id": 40,
+    "product": "Shoes",
+    "price": 188.88,
+    "category": "Fashion"
+  },
+  {
+    "id": 41,
+    "product": "Book",
+    "price": 1601.08,
+    "category": "Travel"
+  },
+  {
+    "id": 42,
+    "product": "Headphones",
+    "price": 427.18,
+    "category": "Education"
+  },
+  {
+    "id": 43,
+    "product": "Shoes",
+    "price": 238.67,
+    "category": "Sports"
+  },
+  {
+    "id": 44,
+    "product": "Headphones",
+    "price": 1958.94,
+    "category": "Electronics"
+  },
+  {
+    "id": 45,
+    "product": "Laptop",
+    "price": 1307.57,
+    "category": "Fashion"
+  },
+  {
+    "id": 46,
+    "product": "Headphones",
+    "price": 874.55,
+    "category": "Fashion"
+  },
+  {
+    "id": 47,
+    "product": "Phone",
+    "price": 869.48,
+    "category": "Travel"
+  },
+  {
+    "id": 48,
+    "product": "Backpack",
+    "price": 703.82,
+    "category": "Education"
+  },
+  {
+    "id": 49,
+    "product": "Laptop",
+    "price": 741.54,
+    "category": "Sports"
+  },
+  {
+    "id": 50,
+    "product": "Shoes",
+    "price": 719.22,
+    "category": "Sports"
+  },
+  {
+    "id": 51,
+    "product": "Tablet",
+    "price": 1488.33,
+    "category": "Electronics"
+  },
+  {
+    "id": 52,
+    "product": "Backpack",
+    "price": 1867.8,
+    "category": "Fashion"
+  },
+  {
+    "id": 53,
+    "product": "Backpack",
+    "price": 770.79,
+    "category": "Travel"
+  },
+  {
+    "id": 54,
+    "product": "Headphones",
+    "price": 473.06,
+    "category": "Electronics"
+  },
+  {
+    "id": 55,
+    "product": "Headphones",
+    "price": 1347.71,
+    "category": "Sports"
+  },
+  {
+    "id": 56,
+    "product": "Tablet",
+    "price": 105.62,
+    "category": "Sports"
+  },
+  {
+    "id": 57,
+    "product": "Laptop",
+    "price": 1087.56,
+    "category": "Fashion"
+  },
+  {
+    "id": 58,
+    "product": "Headphones",
+    "price": 368.21,
+    "category": "Sports"
+  },
+  {
+    "id": 59,
+    "product": "Shoes",
+    "price": 1407.93,
+    "category": "Education"
+  },
+  {
+    "id": 60,
+    "product": "Backpack",
+    "price": 704.94,
+    "category": "Electronics"
+  },
+  {
+    "id": 61,
+    "product": "Book",
+    "price": 1773.65,
+    "category": "Fashion"
+  },
+  {
+    "id": 62,
+    "product": "Laptop",
+    "price": 416.97,
+    "category": "Education"
+  },
+  {
+    "id": 63,
+    "product": "Book",
+    "price": 140.41,
+    "category": "Sports"
+  },
+  {
+    "id": 64,
+    "product": "Headphones",
+    "price": 322.88,
+    "category": "Fashion"
+  },
+  {
+    "id": 65,
+    "product": "Shoes",
+    "price": 516.51,
+    "category": "Travel"
+  },
+  {
+    "id": 66,
+    "product": "Tablet",
+    "price": 676.49,
+    "category": "Travel"
+  },
+  {
+    "id": 67,
+    "product": "Phone",
+    "price": 742.7,
+    "category": "Electronics"
+  },
+  {
+    "id": 68,
+    "product": "Shoes",
+    "price": 501.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 69,
+    "product": "Phone",
+    "price": 757.86,
+    "category": "Sports"
+  },
+  {
+    "id": 70,
+    "product": "Backpack",
+    "price": 238.72,
+    "category": "Education"
+  },
+  {
+    "id": 71,
+    "product": "Backpack",
+    "price": 1099.59,
+    "category": "Education"
+  },
+  {
+    "id": 72,
+    "product": "Phone",
+    "price": 1877.16,
+    "category": "Travel"
+  },
+  {
+    "id": 73,
+    "product": "Shoes",
+    "price": 1303.91,
+    "category": "Electronics"
+  },
+  {
+    "id": 74,
+    "product": "Book",
+    "price": 1753.75,
+    "category": "Education"
+  },
+  {
+    "id": 75,
+    "product": "Phone",
+    "price": 1259.48,
+    "category": "Fashion"
+  },
+  {
+    "id": 76,
+    "product": "Laptop",
+    "price": 744.64,
+    "category": "Fashion"
+  },
+  {
+    "id": 77,
+    "product": "Laptop",
+    "price": 407.35,
+    "category": "Electronics"
+  },
+  {
+    "id": 78,
+    "product": "Headphones",
+    "price": 951.27,
+    "category": "Fashion"
+  },
+  {
+    "id": 79,
+    "product": "Headphones",
+    "price": 546.38,
+    "category": "Fashion"
+  },
+  {
+    "id": 80,
+    "product": "Phone",
+    "price": 1044.28,
+    "category": "Fashion"
+  },
+  {
+    "id": 81,
+    "product": "Headphones",
+    "price": 1100.39,
+    "category": "Fashion"
+  },
+  {
+    "id": 82,
+    "product": "Laptop",
+    "price": 1502.81,
+    "category": "Electronics"
+  },
+  {
+    "id": 83,
+    "product": "Headphones",
+    "price": 1111.16,
+    "category": "Travel"
+  },
+  {
+    "id": 84,
+    "product": "Headphones",
+    "price": 1557.64,
+    "category": "Travel"
+  },
+  {
+    "id": 85,
+    "product": "Book",
+    "price": 1327.86,
+    "category": "Fashion"
+  },
+  {
+    "id": 86,
+    "product": "Phone",
+    "price": 453.56,
+    "category": "Sports"
+  },
+  {
+    "id": 87,
+    "product": "Shoes",
+    "price": 1615.66,
+    "category": "Sports"
+  },
+  {
+    "id": 88,
+    "product": "Shoes",
+    "price": 1719.83,
+    "category": "Sports"
+  },
+  {
+    "id": 89,
+    "product": "Shoes",
+    "price": 348.65,
+    "category": "Education"
+  },
+  {
+    "id": 90,
+    "product": "Laptop",
+    "price": 718.53,
+    "category": "Fashion"
+  },
+  {
+    "id": 91,
+    "product": "Headphones",
+    "price": 298.29,
+    "category": "Sports"
+  },
+  {
+    "id": 92,
+    "product": "Shoes",
+    "price": 1497.63,
+    "category": "Electronics"
+  },
+  {
+    "id": 93,
+    "product": "Phone",
+    "price": 1149.65,
+    "category": "Education"
+  },
+  {
+    "id": 94,
+    "product": "Tablet",
+    "price": 1064.75,
+    "category": "Electronics"
+  },
+  {
+    "id": 95,
+    "product": "Backpack",
+    "price": 1301.75,
+    "category": "Sports"
+  },
+  {
+    "id": 96,
+    "product": "Book",
+    "price": 1080.83,
+    "category": "Fashion"
+  },
+  {
+    "id": 97,
+    "product": "Backpack",
+    "price": 1179.92,
+    "category": "Sports"
+  },
+  {
+    "id": 98,
+    "product": "Backpack",
+    "price": 1072.48,
+    "category": "Sports"
+  },
+  {
+    "id": 99,
+    "product": "Shoes",
+    "price": 1353.81,
+    "category": "Sports"
+  },
+  {
+    "id": 100,
+    "product": "Laptop",
+    "price": 577.24,
+    "category": "Travel"
+  },
+  {
+    "id": 101,
+    "product": "Book",
+    "price": 777.49,
+    "category": "Travel"
+  },
+  {
+    "id": 102,
+    "product": "Headphones",
+    "price": 890.43,
+    "category": "Travel"
+  },
+  {
+    "id": 103,
+    "product": "Laptop",
+    "price": 1851.39,
+    "category": "Sports"
+  },
+  {
+    "id": 104,
+    "product": "Shoes",
+    "price": 1683.51,
+    "category": "Education"
+  },
+  {
+    "id": 105,
+    "product": "Backpack",
+    "price": 1545.4,
+    "category": "Electronics"
+  },
+  {
+    "id": 106,
+    "product": "Headphones",
+    "price": 1517.71,
+    "category": "Fashion"
+  },
+  {
+    "id": 107,
+    "product": "Laptop",
+    "price": 1669.3,
+    "category": "Sports"
+  },
+  {
+    "id": 108,
+    "product": "Phone",
+    "price": 1579.59,
+    "category": "Electronics"
+  },
+  {
+    "id": 109,
+    "product": "Book",
+    "price": 1794.65,
+    "category": "Education"
+  },
+  {
+    "id": 110,
+    "product": "Phone",
+    "price": 1035.72,
+    "category": "Electronics"
+  },
+  {
+    "id": 111,
+    "product": "Phone",
+    "price": 1481.04,
+    "category": "Electronics"
+  },
+  {
+    "id": 112,
+    "product": "Tablet",
+    "price": 684.01,
+    "category": "Fashion"
+  },
+  {
+    "id": 113,
+    "product": "Backpack",
+    "price": 387.32,
+    "category": "Sports"
+  },
+  {
+    "id": 114,
+    "product": "Tablet",
+    "price": 1960.31,
+    "category": "Sports"
+  },
+  {
+    "id": 115,
+    "product": "Shoes",
+    "price": 1269.21,
+    "category": "Education"
+  },
+  {
+    "id": 116,
+    "product": "Laptop",
+    "price": 1278.22,
+    "category": "Electronics"
+  },
+  {
+    "id": 117,
+    "product": "Tablet",
+    "price": 1568.53,
+    "category": "Travel"
+  },
+  {
+    "id": 118,
+    "product": "Headphones",
+    "price": 1537.98,
+    "category": "Travel"
+  },
+  {
+    "id": 119,
+    "product": "Book",
+    "price": 1990.5,
+    "category": "Travel"
+  },
+  {
+    "id": 120,
+    "product": "Book",
+    "price": 963.84,
+    "category": "Electronics"
+  },
+  {
+    "id": 121,
+    "product": "Tablet",
+    "price": 500.99,
+    "category": "Sports"
+  },
+  {
+    "id": 122,
+    "product": "Laptop",
+    "price": 1676.89,
+    "category": "Education"
+  },
+  {
+    "id": 123,
+    "product": "Shoes",
+    "price": 1151.67,
+    "category": "Fashion"
+  },
+  {
+    "id": 124,
+    "product": "Phone",
+    "price": 835.28,
+    "category": "Education"
+  },
+  {
+    "id": 125,
+    "product": "Backpack",
+    "price": 886.96,
+    "category": "Electronics"
+  },
+  {
+    "id": 126,
+    "product": "Shoes",
+    "price": 1390.83,
+    "category": "Travel"
+  },
+  {
+    "id": 127,
+    "product": "Headphones",
+    "price": 1796.05,
+    "category": "Education"
+  },
+  {
+    "id": 128,
+    "product": "Headphones",
+    "price": 95.89,
+    "category": "Electronics"
+  },
+  {
+    "id": 129,
+    "product": "Tablet",
+    "price": 1503.27,
+    "category": "Travel"
+  },
+  {
+    "id": 130,
+    "product": "Tablet",
+    "price": 382.2,
+    "category": "Travel"
+  },
+  {
+    "id": 131,
+    "product": "Backpack",
+    "price": 1245.78,
+    "category": "Education"
+  },
+  {
+    "id": 132,
+    "product": "Laptop",
+    "price": 687.97,
+    "category": "Electronics"
+  },
+  {
+    "id": 133,
+    "product": "Laptop",
+    "price": 302.54,
+    "category": "Education"
+  },
+  {
+    "id": 134,
+    "product": "Tablet",
+    "price": 1134.02,
+    "category": "Fashion"
+  },
+  {
+    "id": 135,
+    "product": "Phone",
+    "price": 1485.15,
+    "category": "Fashion"
+  },
+  {
+    "id": 136,
+    "product": "Shoes",
+    "price": 905.97,
+    "category": "Travel"
+  },
+  {
+    "id": 137,
+    "product": "Book",
+    "price": 920.79,
+    "category": "Travel"
+  },
+  {
+    "id": 138,
+    "product": "Book",
+    "price": 407.69,
+    "category": "Sports"
+  },
+  {
+    "id": 139,
+    "product": "Backpack",
+    "price": 309.24,
+    "category": "Sports"
+  },
+  {
+    "id": 140,
+    "product": "Shoes",
+    "price": 1143.15,
+    "category": "Sports"
+  },
+  {
+    "id": 141,
+    "product": "Book",
+    "price": 888.65,
+    "category": "Sports"
+  },
+  {
+    "id": 142,
+    "product": "Shoes",
+    "price": 15.82,
+    "category": "Fashion"
+  },
+  {
+    "id": 143,
+    "product": "Shoes",
+    "price": 1860.31,
+    "category": "Electronics"
+  },
+  {
+    "id": 144,
+    "product": "Backpack",
+    "price": 232.65,
+    "category": "Travel"
+  },
+  {
+    "id": 145,
+    "product": "Shoes",
+    "price": 1590.69,
+    "category": "Fashion"
+  },
+  {
+    "id": 146,
+    "product": "Phone",
+    "price": 1735.3,
+    "category": "Travel"
+  },
+  {
+    "id": 147,
+    "product": "Shoes",
+    "price": 1486.16,
+    "category": "Education"
+  },
+  {
+    "id": 148,
+    "product": "Backpack",
+    "price": 104.89,
+    "category": "Education"
+  },
+  {
+    "id": 149,
+    "product": "Laptop",
+    "price": 106.8,
+    "category": "Travel"
+  },
+  {
+    "id": 150,
+    "product": "Laptop",
+    "price": 178.41,
+    "category": "Education"
+  }
+]
