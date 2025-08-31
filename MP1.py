@@ -103,7 +103,7 @@ txt_data = load_txt("C:/Users/Asim/Downloads/MP1/sample.txt") # Remember to chan
 xlsx_data = load_xlsx("C:/Users/Asim/Downloads/MP1/sample.xlsx") # Remember to change the path
 
 # Example YouTube video
-API_KEY = # <-- Replace with your YouTube Data API key
+API_KEY = "AIzaSyCLlvDP9E1GwuY50vzpoeQhefVeN1d2e_k" # <-- Replace with your YouTube Data API key
 video_id = "dQw4w9WgXcQ" # just the video ID, not full URL
 yt_metadata = load_youtube_metadata_api(video_id, API_KEY)
 
