@@ -6,7 +6,26 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 from scipy.stats import shapiro
 
-# --- Load ---
+# --- Parameters ---
+
+"""
+    Plot histograms for numeric columns in a DataFrame.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The dataframe containing the data.
+    cols : list, optional
+        List of column names to plot. If None, all numeric columns are used.
+    bins : int, optional
+        Number of bins for the histogram.
+    kde : bool, optional
+        Whether to overlay a KDE curve.
+    exclude : list, optional
+        List of column names to exclude (useful for 'quality' or derived bins).
+"""
+
+# --- Task 1 + 4: Load ---
 def load_wine(path):
     if path.lower().endswith(".csv"):
         return pd.read_csv(path, sep=",")
@@ -21,7 +40,7 @@ red_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/winequality-red.
 white_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/winequality-white.xlsx")
 wineqt_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/WineQT.csv")
 
-# ---Clean ---
+# --- Task 2 + 4: Clean ---
 def clean(df):
     df = df.copy()
     df.columns = [str(c).strip().lower().replace(" ", "_").replace("-", "_") for c in df.columns]
@@ -40,7 +59,7 @@ def clean(df):
         df[c] = pd.to_numeric(df[c], errors="coerce")
         # Here rows with 'NaN' gets deleted
     df = df.dropna()
-
+    # Removes duplicates found in the datasets
     df = df.drop_duplicates().reset_index(drop=True)
 
     return df
@@ -53,41 +72,71 @@ red_df["type"] = "Red"
 white_df["type"] = "White"
 wineqt_df["type"] = "Public Wine"
 
-# --- Aggregate ---
+# --- Task 3 + 4: Aggregate ---
 all_wine = pd.concat([red_df, white_df, wineqt_df], ignore_index=True)
 
 print("Red:", red_df.shape)
 print("White:", white_df.shape)
 print("Public Wine Quality", wineqt_df.shape)
 print("All:", all_wine.shape)
-print(all_wine.head())
+# print(all_wine.head()) // Shows the first 5 rows of the DataFrame, so you can confirm it merged correctly.
 
-# --- Basic info ---
+# --- Task 5: Explore Features and Visualisation---
+
+def plot_correlation_heatmap(df, title="Correlation Heatmap"):
+
+    plt.figure(figsize=(12,8))
+    corr = df.drop(columns=["type"], errors="ignore").corr()  # safely drop if 'type' exists
+    sb.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+    plt.title(title)
+    plt.show()
+
+
+plot_correlation_heatmap(all_wine)
+
+
+
+
+
+# --- Task 7: Descriptive Statistics & Normality Check ---
+
+# 1. Descriptive statistics
 print(all_wine.info())
 desc = all_wine.groupby("type").describe()
 desc.columns = ["_".join(col).strip() for col in desc.columns.values]
 print(desc.head())
-# desc.to_excel("wine_descriptive_stats.xlsx")
+# desc.to_excel("wine_descriptive_stats.xlsx") // This would save the descriptive stats to an Excel file for reporting.
 
-# --- Distribution of target variable ---
-plt.figure(figsize=(8,5))
-sb.countplot(data=all_wine, x="quality", hue="type", palette="Set2")
-plt.title("Distribution of Wine Quality Scores")
-plt.show()
+# 2. Histograms of all numeric features (visual normality check)
+def plot_histograms(df, cols=None, bins=30, kde=True, exclude=None):
+    if cols is None:
+        cols = df.select_dtypes(include="number").columns.tolist()
+    if exclude:
+        cols = [c for c in cols if c not in exclude]
 
-# --- Visual histogram for key features (positively skewed)
-cols = ["alcohol", "residual_sugar", "volatile_acidity"]
-for col in cols:
-    sb.histplot(all_wine[col], bins=30, kde=True)
-    plt.title(f"Histogram of {col.upper()}")
-    plt.show()
+    for col in cols:
+        plt.figure(figsize=(7,4))
+        sb.histplot(df[col].dropna(), bins=bins, kde=kde)
+        plt.title(f"Histogram of {col.replace('_',' ').title()}")
+        plt.xlabel(col.replace("_"," ").title())
+        plt.ylabel("Count")
+        plt.show()
 
-# --- Correlation heatmap ---
-plt.figure(figsize=(12,8))
-corr = all_wine.drop(columns=["type"]).corr()
-sb.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
-plt.title("Correlation Heatmap of Features")
-plt.show()
+plot_histograms(all_wine)
+
+# 3. Shapiro-Wilk test for selected features
+from scipy.stats import shapiro
+
+def shapiro_report(series: pd.Series, name: str):
+    x = series.dropna().astype(float)
+    if len(x) > 5000:  # Shapiro requires <= 5000
+        x = x.sample(5000, random_state=42)
+    stat, p = shapiro(x)
+    conclusion = "NOT normal" if p < 0.05 else "approximately normal"
+    print(f"{name:>18s}: W={stat:.3f}, p={p:.3g} -> {conclusion}")
+
+for col in all_wine.select_dtypes(include="number").columns:
+    shapiro_report(all_wine[col], col)
 
 # --- Boxplots for key predictors vs quality ---
 plt.figure(figsize=(12,6))
@@ -127,7 +176,7 @@ for col in ["alcohol","residual_sugar","volatile_acidity"]:
     stat, p = shapiro(all_wine[col])
     print(f"{col}: stat={stat:.3f}, p={p:.3f}")
 
-# Which other questions might be of interest for the wine consumers and which of wine distributers?
+# --- Task 9: Which other questions might be of interest for the wine consumers and which of wine distributers? ---
 
 # Consumers:
 # 1. If price data were available, is paying more strongly correlated with higher quality? (Price vs quality)
@@ -138,5 +187,6 @@ for col in ["alcohol","residual_sugar","volatile_acidity"]:
 # Wine distributers:
 # 1. What attributes drive higher-rated wines? Should they focus production on wines with higher alcohol and lower volatile acidity?
 # 2. Is there more variation in white wine quality vs red? (helps standardize production). 
+
 
 
