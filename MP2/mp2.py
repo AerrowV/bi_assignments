@@ -1,5 +1,6 @@
 # Data Exploration and Visualisation
 
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -36,9 +37,12 @@ def load_wine(path):
             df = df.iloc[1:].reset_index(drop=True)
         return df
 
-red_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/winequality-red.xlsx")
-white_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/winequality-white.xlsx")
-wineqt_df = load_wine("C:/Users/busin/Documents/bi_assignments/MP2/WineQT.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
+DATA_DIR = os.path.join(BASE_DIR, "data")             
+
+red_df = load_wine(os.path.join(DATA_DIR, "winequality-red.xlsx"))
+white_df = load_wine(os.path.join(DATA_DIR, "winequality-white.xlsx"))
+wineqt_df = load_wine(os.path.join(DATA_DIR, "WineQT.csv"))
 
 # --- Task 2 + 4: Clean ---
 def clean(df):
@@ -92,10 +96,61 @@ def plot_correlation_heatmap(df, title="Correlation Heatmap"):
     plt.show()
 
 
+plot_correlation_heatmap(red_df)
+plot_correlation_heatmap(white_df)
+plot_correlation_heatmap(wineqt_df)
 plot_correlation_heatmap(all_wine)
 
+# --- Boxplots for Dependent Features ---
 
+def plot_feature_boxplot(df, x_col, y_col, palette="Set1", title=None, hue=None):
+  
+    plt.figure(figsize=(12,6))
+    sb.boxplot(data=df, x=x_col, y=y_col, hue=hue, palette=palette)
+    if title is None:
+        if hue:
+            title = f"{y_col.capitalize()} vs {x_col.capitalize()} by {hue.capitalize()}"
+        else:
+            title = f"{y_col.capitalize()} vs {x_col.capitalize()}"
+    plt.title(title)
+    plt.show()
 
+# ---  Scatterplots for Dependent Features ---
+
+def plot_feature_scatter(df, x_col, y_col, hue=None, palette="Set1", title=None, alpha=0.6):
+  
+    plt.figure(figsize=(12,6))
+    sb.scatterplot(data=df, x=x_col, y=y_col, hue=hue, palette=palette, alpha=alpha)
+    if title is None:
+        title = f"{y_col.capitalize()} vs {x_col.capitalize()}"
+    plt.title(title)
+    plt.show()
+
+# --- Task 6: Data Transformation (Encoding & Discretization)
+def transform_wine_data(df):
+    df = df.copy()
+
+    # --- Encode categorical ---
+    if "type" in df.columns:
+        df["type_code"] = df["type"].astype("category").cat.codes
+
+    # --- Discretize numeric features ---
+    # Example: alcohol into 5 bins
+    df["alcohol_bin"] = pd.cut(
+        df["alcohol"], bins=5,
+        labels=["Very Low", "Low", "Medium", "High", "Very High"]
+    )
+
+    # Example: quality into 3 custom bins
+    df["quality_bin"] = pd.cut(
+        df["quality"], bins=[0, 4, 6, 10],
+        labels=["Low", "Medium", "High"]
+    )
+
+    return df
+
+all_wine = transform_wine_data(all_wine)
+print(all_wine.head())
 
 
 # --- Task 7: Descriptive Statistics & Normality Check ---
@@ -138,43 +193,40 @@ def shapiro_report(series: pd.Series, name: str):
 for col in all_wine.select_dtypes(include="number").columns:
     shapiro_report(all_wine[col], col)
 
-# --- Boxplots for key predictors vs quality ---
-plt.figure(figsize=(12,6))
-sb.boxplot(data=all_wine, x="quality", y="alcohol", hue="type", palette="Set3")
-plt.title("Alcohol vs Quality by Type")
-plt.show()
+# --- Task 8: ---
 
-plt.figure(figsize=(12,6))
-sb.boxplot(data=all_wine, x="quality", y="volatile_acidity", hue="type", palette="Set1")
-plt.title("Volatile Acidity vs Quality by Type")
-plt.show()
+# A:
 
-# The dataset was already numeric and suitable for analysis. Apart from column name cleaning and removal of duplicates/IDs, no additional transformations were necessary.
+plot_feature_boxplot(red_df, "fixed_acidity", "density", palette="Set1", hue="type")
+# The first boxplot shows that a higher density increases the fixed acidity.
+# The distribution exhibits a cluster of outliers around the central values, suggesting that deviations are not confined to the extremes.
 
-# Which type has higher average alcohol and residual sugar
-plt.figure(figsize=(8,6))
-sb.boxplot(data=all_wine, x="type", y="alcohol", palette="Set2")
-plt.title("Alcohol Levels by Wine Type")
-plt.show()
+plot_feature_boxplot(red_df, "fixed_acidity", "ph", palette="Set1", hue="type")
+# Lower pH values are associated with higher fixed acidity, reflecting the expected negative correlation between acidity and pH.
+# The middle portion of the chart shows the highest density of outliers, suggesting irregular variation in that region.
 
-plt.figure(figsize=(8,6))
-sb.boxplot(data=all_wine, x="type", y="residual_sugar", palette="Set2")
-plt.title("Residual Sugar by Wine Type")
-plt.show()
+plot_feature_boxplot(white_df, "alcohol", "density", palette="Set3", hue="type")
+# The boxplot indicates that low-density wines have higher average alcohol levels.
+# The distribution of alcohol shows that outliers are concentrated in the upper range, indicating that some wines have unusually high alcohol content relative to the majority of samples.
 
+plot_feature_boxplot(white_df, "density", "residual_sugar", palette="Set3", hue="type")
+# Higher residual sugar corresponds to higher density.
+# The outliers are dispersed throughout all sugar levels, suggesting consistent variability across the dataset.
 
-# Discretize alcohol into bins
-all_wine["alcohol_bin"] = pd.cut(all_wine["alcohol"], bins=5,
-                                 labels=["Very Low","Low","Medium","High","Very High"])
+# B:
+# White wine has a higher average level of quality compared to red wine. Where white wine is 5,85483463771775 and red win being 5,62325239146431
 
-# Discretize quality into categories (Low: 3-4, Medium: 5-6, High: 7+)
-all_wine["quality_bin"] = pd.cut(all_wine["quality"],
-                                 bins=[0,4,6,10],
-                                 labels=["Low","Medium","High"])
+# C:
+# White wine has a higher average level of alcohol compared to red wine. White wine being 10,5893579062526 and red wine being 10,4323154280108
 
-for col in ["alcohol","residual_sugar","volatile_acidity"]:
-    stat, p = shapiro(all_wine[col])
-    print(f"{col}: stat={stat:.3f}, p={p:.3f}")
+# D:
+# White wine has a way higher average quantity of redisual sugar compared to red wine. White wine being 5,91481949002777 and red wine being 2,5233995584989
+
+# E:
+plot_feature_scatter(all_wine, "alcohol", "quality", palette="Set1", hue="type")
+# The higher the alcohol content, the better the perceived quality.
+plot_feature_scatter(all_wine, "residual_sugar", "quality", palette="Set1", hue="type")
+# Lower residual sugar levels corresponds to lower quality
 
 # --- Task 9: Which other questions might be of interest for the wine consumers and which of wine distributers? ---
 
@@ -188,5 +240,45 @@ for col in ["alcohol","residual_sugar","volatile_acidity"]:
 # 1. What attributes drive higher-rated wines? Should they focus production on wines with higher alcohol and lower volatile acidity?
 # 2. Is there more variation in white wine quality vs red? (helps standardize production). 
 
+# --- Task 10: Binning pH and checking densities ---
+
+# Split into 5 bins
+all_wine["ph_bin_5"] = pd.cut(all_wine["ph"], bins=5)
+
+# For each bin, calculate average density
+density_by_ph5 = all_wine.groupby("ph_bin_5")["density"].mean()
+print("Mean density by 5 pH bins:\n", density_by_ph5)
+
+# Which bin has highest density?
+highest_5 = density_by_ph5.idxmax(), density_by_ph5.max()
+print("Highest (5 bins):", highest_5)
+
+# Split into 10 bins
+all_wine["ph_bin_10"] = pd.cut(all_wine["ph"], bins=10)
+
+density_by_ph10 = all_wine.groupby("ph_bin_10")["density"].mean()
+print("Mean density by 10 pH bins:\n", density_by_ph10)
+
+# Which bin has highest density?
+highest_10 = density_by_ph10.idxmax(), density_by_ph10.max()
+print("Highest (10 bins):", highest_10)
+
+# --- Task 11: ---
+# Select only numeric columns
+num_df = all_wine.select_dtypes(include="number")
+
+# Correlation matrix (Pearson)
+corr = num_df.corr()
+
+# Show as dataframe sorted by correlation with quality
+print("Correlation with Quality:\n", corr["quality"].sort_values(ascending=False))
+
+# Heatmap
+plt.figure(figsize=(12,8))
+sb.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+plt.title("Correlation Heatmap of Wine Attributes")
+plt.show()
+
+# --- Task 12: Explore and remove outliers. ---
 
 
