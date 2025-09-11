@@ -7,25 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 from scipy.stats import shapiro
 
-# --- Parameters ---
-
-"""
-    Plot histograms for numeric columns in a DataFrame.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        The dataframe containing the data.
-    cols : list, optional
-        List of column names to plot. If None, all numeric columns are used.
-    bins : int, optional
-        Number of bins for the histogram.
-    kde : bool, optional
-        Whether to overlay a KDE curve.
-    exclude : list, optional
-        List of column names to exclude (useful for 'quality' or derived bins).
-"""
-
 # --- Task 1 + 4: Load ---
 def load_wine(path):
     if path.lower().endswith(".csv"):
@@ -223,9 +204,9 @@ plot_feature_boxplot(white_df, "density", "residual_sugar", palette="Set3", hue=
 # White wine has a way higher average quantity of redisual sugar compared to red wine. White wine being 5,91481949002777 and red wine being 2,5233995584989
 
 # E:
-plot_feature_scatter(all_wine, "alcohol", "quality", palette="Set1", hue="type")
+plot_feature_boxplot(all_wine, "quality", "alcohol", palette="Set1", hue="type")
 # The higher the alcohol content, the better the perceived quality.
-plot_feature_scatter(all_wine, "residual_sugar", "quality", palette="Set1", hue="type")
+plot_feature_boxplot(all_wine, "quality", "residual_sugar", palette="Set1", hue="type")
 # Lower residual sugar levels corresponds to lower quality
 
 # --- Task 9: Which other questions might be of interest for the wine consumers and which of wine distributers? ---
@@ -279,6 +260,136 @@ sb.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
 plt.title("Correlation Heatmap of Wine Attributes")
 plt.show()
 
-# --- Task 12: Explore and remove outliers. ---
+# --- Task 12: Outlier Detection & Removal ---
+
+def detect_outliers_iqr(df, column):
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    outliers = df[(df[column] < lower) | (df[column] > upper)]
+    return outliers.index, lower, upper
+
+outlier_summary = {}
+
+# Check all numeric features
+for col in all_wine.select_dtypes(include="number").columns:
+    idx, lower, upper = detect_outliers_iqr(all_wine, col)
+    if len(idx) > 0:
+        outlier_summary[col] = len(idx)
+        print(f"{col}: {len(idx)} outliers (outside {lower:.2f}–{upper:.2f})")
+
+print("\nFeatures with outliers:", list(outlier_summary.keys()))
+
+def remove_outliers_iqr(df):
+    df_clean = df.copy()
+    for col in df_clean.select_dtypes(include="number").columns:
+        Q1 = df_clean[col].quantile(0.25)
+        Q3 = df_clean[col].quantile(0.75)
+        IQR = Q3 - Q1 
+        lower = Q1 - 1.5 * IQR
+        upper = Q3 + 1.5 * IQR
+        df_clean = df_clean[(df_clean[col] >= lower) & (df_clean[col] <= upper)]
+    return df_clean.reset_index(drop=True)
+
+all_wine_no_outliers = remove_outliers_iqr(all_wine)
+
+print("Original shape:", all_wine.shape)
+print("After removing outliers:", all_wine_no_outliers.shape)
 
 
+# --- Task 13: Removing of attributes  ---
+
+def low_correlation_columns(df, target="quality", threshold=0.1):
+    numeric_cols = df.select_dtypes(include=['number']).columns
+
+    # Absolute correlation with the target (covers both negative and positive)
+    corr = df[numeric_cols].corr()[target].abs()
+
+    # Keep only columns below the threshold (and exclude target itself)
+    low_corr = corr[corr < threshold].index.drop(target, errors='ignore')
+    return list(low_corr)
+
+# Example: remove columns whose |correlation| is below 0.4
+low_corr_cols = low_correlation_columns(all_wine, target="quality", threshold=0.4)
+print("Columns with low absolute correlation to quality:", low_corr_cols)
+
+# Drop those columns if desired
+df_reduced = all_wine.drop(columns=low_corr_cols)
+
+# --- Task 14: Data Transformation for Further Analysis ---
+
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, Normalizer
+from sklearn.decomposition import PCA
+
+def scale_normalize_standardize(df, exclude=None):
+    if exclude is None:
+        exclude = []
+
+    num_cols = [c for c in df.select_dtypes(include="number").columns if c not in exclude]
+
+    # --- Standardization: mean=0, std=1 ---
+    standard_scaler = StandardScaler()
+    df_standardized = df.copy()
+    df_standardized[num_cols] = standard_scaler.fit_transform(df[num_cols])
+
+    # --- Normalization: row-wise to unit length (L2 norm by default) ---
+    normalizer = Normalizer()
+    df_normalized = df.copy()
+    df_normalized[num_cols] = normalizer.fit_transform(df[num_cols])
+
+    # --- Min-Max Scaling: each feature to range [0,1] ---
+    minmax_scaler = MinMaxScaler()
+    df_minmax = df.copy()
+    df_minmax[num_cols] = minmax_scaler.fit_transform(df[num_cols])
+
+    return df_standardized, df_normalized, df_minmax
+
+# Exclude 'type_code' or other categorical/encoded columns if you don't want to scale them
+scaled_std, scaled_norm, scaled_minmax = scale_normalize_standardize(
+    all_wine,
+    exclude=["type_code", "quality_bin", "alcohol_bin"]
+)
+
+print("\nShapes after scaling/normalization/standardization:")
+print("Standardized:", scaled_std.shape)
+print("Normalized:", scaled_norm.shape)
+print("Min-Max scaled:", scaled_minmax.shape)
+
+
+# --- Principal Component Analysis (PCA) ---
+def apply_pca(df, n_components=2, exclude=None):
+    if exclude is None:
+        exclude = []
+
+    num_cols = [c for c in df.select_dtypes(include="number").columns if c not in exclude]
+
+    # Important: standardize before PCA for equal feature weighting
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(df[num_cols])
+
+    pca = PCA(n_components=n_components)
+    components = pca.fit_transform(X_scaled)
+
+    pca_cols = [f"PC{i+1}" for i in range(n_components)]
+    pca_df = pd.DataFrame(components, columns=pca_cols)
+
+    # Optional: keep type or quality columns for plotting/grouping
+    for col in ["type", "quality"]:
+        if col in df.columns:
+            pca_df[col] = df[col].values
+
+    print("\nExplained variance ratio:", pca.explained_variance_ratio_)
+    return pca_df, pca
+
+pca_df, pca_model = apply_pca(all_wine, n_components=2, exclude=["type_code","quality_bin","alcohol_bin"])
+
+print("\nFirst rows of PCA result:")
+print(pca_df.head())
+
+# --- Optional visualization of PCA results ---
+plt.figure(figsize=(8,6))
+sb.scatterplot(data=pca_df, x="PC1", y="PC2", hue="type", palette="Set1", alpha=0.7)
+plt.title("PCA of Wine Data (2 Components)")
+plt.show()
