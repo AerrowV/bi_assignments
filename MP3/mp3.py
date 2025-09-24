@@ -200,6 +200,7 @@ coef_table = pd.DataFrame({
     "feature": X_train.columns,
     "coefficient": linreg.coef_
 })
+# Question 3. in README.md
 print(coef_table.sort_values(by="coefficient", ascending=False).head(15))  # Top 15 features
 print(coef_table.sort_values(by="coefficient", ascending=True).head(15))   # Bottom 15 features
 
@@ -248,6 +249,23 @@ classifier2 = RandomForestClassifier(n_estimators = 100, max_depth = 6)
 
 classifier.fit(X_train, y_train)
 classifier2.fit(X_train, y_train)
+
+importances = classifier2.feature_importances_
+features = X.columns
+
+# Question 1. in README.md
+feat_importance = pd.DataFrame({
+    "Feature": features,
+    "Importance": importances
+}).sort_values(by="Importance", ascending=False)
+
+# Plot top 10
+plt.figure(figsize=(10,6))
+plt.barh(feat_importance["Feature"][:10][::-1], 
+         feat_importance["Importance"][:10][::-1], color="skyblue")
+plt.xlabel("Importance")
+plt.title("Top 10 Factors Influencing Attrition")
+plt.show()
 
 # Export decision tree to PDF in the data folder
 out_path = os.path.join(DATA_DIR, "attrition_tree")
