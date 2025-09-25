@@ -14,6 +14,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
 
 # --- Load ---
 def load_employee(path):
@@ -266,7 +270,7 @@ plt.barh(feat_importance["Feature"][:10][::-1],
 plt.xlabel("Importance")
 plt.title("Top 10 Factors Influencing Attrition")
 plt.show()
-
+""""
 # Export decision tree to PDF in the data folder
 out_path = os.path.join(DATA_DIR, "attrition_tree")
 
@@ -284,7 +288,7 @@ graph = graphviz.Source(dot_data, format="pdf")
 graph.render(out_path, cleanup=True)
 
 print(f"Decision tree saved to: {out_path}.pdf")
-
+"""
 # --- Model validation ---
 
 # Predict the labels of the test data
@@ -324,4 +328,53 @@ sb.heatmap(confusion_mat,
 plt.ylabel("True labels")
 plt.xlabel("Predicted labels")
 plt.title("Confusion Matrix")
+plt.show()
+
+# --- Clustering ---
+df_cluster = employee_engineered_df.copy()
+
+# Drop columns that don't make sense for clustering
+drop_cols = [c for c in ["EmployeeNumber", "EmployeeCount", "StandardHours", "Attrition"] if c in df_cluster.columns]
+df_cluster = df_cluster.drop(columns=drop_cols)
+
+# Ensure we only cluster on numeric columns
+df_cluster = df_cluster.select_dtypes(include=["number"])
+
+# Scale
+scaler = StandardScaler()
+X_clust = scaler.fit_transform(df_cluster)
+
+# Search k
+ks = range(2, 11)
+inertias = []
+sil_scores = []
+
+for k in ks:
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    labels = km.fit_predict(X_clust)
+    inertias.append(km.inertia_)
+    sil_scores.append(silhouette_score(X_clust, labels))
+
+# Pick best k (max silhouette)
+best_k = ks[int(np.argmax(sil_scores))]
+best_sil = sil_scores[int(np.argmax(sil_scores))]
+print(f"Best k by silhouette: k={best_k}, silhouette={best_sil:.4f}")
+
+# Fit final model and attach labels
+best_kmeans = KMeans(n_clusters=best_k, random_state=42, n_init=10)
+final_labels = best_kmeans.fit_predict(X_clust)
+employee_engineered_df["Cluster"] = final_labels  # keep cluster on your main engineered DF
+
+# --- Diagnostics: Elbow & Silhouette plots ---
+plt.figure(figsize=(12,4))
+plt.subplot(1,2,1)
+plt.plot(list(ks), inertias, marker="o")
+plt.title("Elbow (Inertia) vs k")
+plt.xlabel("k"); plt.ylabel("Inertia")
+
+plt.subplot(1,2,2)
+plt.plot(list(ks), sil_scores, marker="o")
+plt.title("Silhouette vs k")
+plt.xlabel("k"); plt.ylabel("Silhouette score")
+plt.tight_layout()
 plt.show()
