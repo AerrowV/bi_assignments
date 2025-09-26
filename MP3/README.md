@@ -39,8 +39,6 @@ The dataset includes demographic, job-related, and compensation attributes. Expl
 5. **Education and satisfaction**  
    Education shows negligible correlation with job satisfaction, suggesting that higher education does not directly translate into greater workplace contentment.
 
-6. **Clustering**  
-   KMeans clustering yielded compact groupings concentrated at the lower end of income and tenure distributions, with no substantial outliers detected. The silhouette score indicated reasonable separation but suggested the workforce is largely homogeneous in certain dimensions.
 
 ## Challenges and Opportunities
 - The attrition label is imbalanced, requiring careful model selection.  
