@@ -17,7 +17,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-
+from sklearn import metrics
+from scipy.spatial.distance import cdist
 
 # --- Load ---
 def load_employee(path):
@@ -270,7 +271,6 @@ plt.barh(feat_importance["Feature"][:10][::-1],
 plt.xlabel("Importance")
 plt.title("Top 10 Factors Influencing Attrition")
 plt.show()
-""""
 # Export decision tree to PDF in the data folder
 out_path = os.path.join(DATA_DIR, "attrition_tree")
 
@@ -287,9 +287,7 @@ dot_data = tree.export_graphviz(
 graph = graphviz.Source(dot_data, format="pdf")
 graph.render(out_path, cleanup=True)
 
-print(f"Decision tree saved to: {out_path}.pdf")
-"""
-# --- Model validation ---
+print(f"Decision tree saved to: {out_path}.pdf")# --- Model validation ---
 
 # Predict the labels of the test data
 y_testp = classifier.predict(X_test)
@@ -333,48 +331,91 @@ plt.show()
 # --- Clustering ---
 df_cluster = employee_engineered_df.copy()
 
-# Drop columns that don't make sense for clustering
 drop_cols = [c for c in ["EmployeeNumber", "EmployeeCount", "StandardHours", "Attrition"] if c in df_cluster.columns]
 df_cluster = df_cluster.drop(columns=drop_cols)
 
-# Ensure we only cluster on numeric columns
-df_cluster = df_cluster.select_dtypes(include=["number"])
+# Use only numeric features and handle NaNs
+X = df_cluster.select_dtypes(include=[np.number]).fillna(0).values
 
-# Scale
-scaler = StandardScaler()
-X_clust = scaler.fit_transform(df_cluster)
+# --- Distortion / Elbow Method ---
+distortions = []
+K = range(2, 10)
 
-# Search k
-ks = range(2, 11)
-inertias = []
-sil_scores = []
+for k in K:
+    model = KMeans(n_clusters=k, n_init=10, random_state=42)
+    model.fit(X)
+    distortions.append(np.min(cdist(X, model.cluster_centers_, 'euclidean'), axis=1).mean())
 
-for k in ks:
-    km = KMeans(n_clusters=k, random_state=42, n_init=10)
-    labels = km.fit_predict(X_clust)
-    inertias.append(km.inertia_)
-    sil_scores.append(silhouette_score(X_clust, labels))
+print("Distortion:", distortions)
 
-# Pick best k (max silhouette)
-best_k = ks[int(np.argmax(sil_scores))]
-best_sil = sil_scores[int(np.argmax(sil_scores))]
-print(f"Best k by silhouette: k={best_k}, silhouette={best_sil:.4f}")
-
-# Fit final model and attach labels
-best_kmeans = KMeans(n_clusters=best_k, random_state=42, n_init=10)
-final_labels = best_kmeans.fit_predict(X_clust)
-employee_engineered_df["Cluster"] = final_labels  # keep cluster on your main engineered DF
-
-# --- Diagnostics: Elbow & Silhouette plots ---
-plt.figure(figsize=(12,4))
-plt.subplot(1,2,1)
-plt.plot(list(ks), inertias, marker="o")
-plt.title("Elbow (Inertia) vs k")
-plt.xlabel("k"); plt.ylabel("Inertia")
-
-plt.subplot(1,2,2)
-plt.plot(list(ks), sil_scores, marker="o")
-plt.title("Silhouette vs k")
-plt.xlabel("k"); plt.ylabel("Silhouette score")
-plt.tight_layout()
+plt.title('Elbow Method for Optimal K (Distortion)')
+plt.plot(list(K), distortions, 'bx-')
+plt.xlabel('K')
+plt.ylabel('Average min distance (distortion)')
+plt.xticks(list(K))
 plt.show()
+
+# --- Silhouette Method ---
+scores = []
+for k in K:
+    model = KMeans(n_clusters=k, n_init=10, random_state=42)
+    model.fit(X)
+    score = metrics.silhouette_score(X, model.labels_, metric='euclidean')
+    print("\nNumber of clusters =", k)
+    print("Silhouette score =", score)
+    scores.append(score)
+
+plt.title('Silhouette Score Method for Discovering the Optimal K')
+plt.plot(list(K), scores, 'bx-')
+plt.xlabel('K')
+plt.ylabel('Silhouette Score')
+plt.xticks(list(K))
+plt.show()
+
+num_clusters = 3
+
+kmeans = KMeans(init='k-means++', n_clusters=num_clusters, n_init=20)
+
+kmeans.fit(X)
+
+y = kmeans.predict(X)
+centers = kmeans.cluster_centers_
+
+print(kmeans.labels_)
+for i in range(num_clusters):
+    cluster = X[y == i]
+    print("Cluster ", i, ": ", cluster.shape)
+    plt.scatter(cluster[:, 0], cluster[:, 1])
+    plt.grid(True)
+    plt.show()
+
+# 2D Cluster Plot (Scatter)
+plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='viridis')
+plt.grid(True)
+plt.show()
+
+print(centers)
+
+# ===== 3D visualization =====
+if X.shape[1] < 3:
+    print(f"Cannot do 3D plot: need at least 3 features, got {X.shape[1]}")
+else:
+    var_per_col = X.var(axis=0)
+    idx3 = np.argsort(var_per_col)[-3:]
+    X3 = X[:, idx3]
+    centers3 = centers[:, idx3]
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.set_title('Discovered Clusters (3D)')
+
+    ax.scatter(X3[:, 0], X3[:, 1], X3[:, 2], c=y, cmap='viridis', s=20)
+
+    ax.scatter(centers3[:, 0], centers3[:, 1], centers3[:, 2],
+               marker='x', s=150, linewidth=2, color='red')
+
+    ax.set_xlabel(f'Feature {idx3[0]}')
+    ax.set_ylabel(f'Feature {idx3[1]}')
+    ax.set_zlabel(f'Feature {idx3[2]}')
+
+    plt.show()
