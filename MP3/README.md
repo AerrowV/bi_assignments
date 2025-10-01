@@ -45,6 +45,7 @@ Based on our results from the three different models—multiple linear regressio
 7. **Accurary of predictions**
 Based on our findings from the heatmaps, along with an R² score and accuracy of about 86 %, we can confidently say that our model is quite precise. The confusion matrix supports this, showing roughly the same accuracy with 186 correct and 35 incorrect predictions.
 
-8 & 9. **Challenges and Opportunities**- The attrition label is imbalanced, requiring careful model selection.  
+8 & 9. **Challenges and Opportunities** 
+- The attrition label is imbalanced, requiring careful model selection.  
 - Strong correlations between compensation and tenure complicate feature independence assumptions.  
 - Improvements may be achieved through advanced feature engineering and hyperparameter optimization of tree-based classifiers.
