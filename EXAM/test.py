@@ -7,42 +7,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import sklearn.metrics as sm 
 import graphviz
-from sklearn.metrics import r2_score
-from sklearn import model_selection
+from sklearn.metrics import r2_score, accuracy_score, confusion_matrix
+from sklearn import model_selection, tree, metrics
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import tree
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn import metrics
 from scipy.spatial.distance import cdist
 import re
+from pathlib import Path
 
-# --- Load ---
-def load_data(path):
-    if path.lower().endswith(".csv"):
-        return pd.read_csv(path, sep=",")
-    else:
-        df = pd.read_excel(path)
-        if any(str(c).lower().startswith("unnamed") for c in df.columns):
-            df.columns = df.iloc[0]
-            df = df.iloc[1:].reset_index(drop=True)
-        return df
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
-DATA_DIR = os.path.join(BASE_DIR, "data")
-
-riget_disp = load_data(os.path.join(DATA_DIR, "Rigshospitalet_disponible_sengepladser.xlsx"))
-riget_norm = load_data(os.path.join(DATA_DIR, "Rigshospitalet_normerede_sengepladser.xlsx"))
-aarhus_disp = load_data(os.path.join(DATA_DIR, "Aarhus_Hospital_disponible_sengepladser.xlsx"))
-aarhus_norm = load_data(os.path.join(DATA_DIR, "Aarhus_Hospital_normerede_sengepladser.xlsx"))
-wp_mjylland = load_data(os.path.join(DATA_DIR, "Region_Midtjylland_ventetider.xlsx"))
-wp_hstaden = load_data(os.path.join(DATA_DIR, "Region_Hovedstaden_ventetider.xlsx"))
 
 # --- Clean ---
+
+
 def clean_beds(df: pd.DataFrame, drop_blandet: bool = True, add_date: bool = True) -> pd.DataFrame:
     df = df.copy()
 
@@ -54,29 +33,12 @@ def clean_beds(df: pd.DataFrame, drop_blandet: bool = True, add_date: bool = Tru
     # Clean column names (remove spaces/dashes)
     df.columns = [str(c).strip().replace(" ", "").replace("-", "") for c in df.columns]
 
-    # Drop "Blandet" since it is not relevant
-    if drop_blandet and "Blandet" in df.columns:
-        df = df.drop(columns=["Blandet"])
-
-    # Keep only year, month, and department columns
-    keep = ["År", "Måned", "Kirurgi", "Medicin", "Onkologi", "Øvrige"]
-    df = df[[c for c in keep if c in df.columns]].copy()
-
-    # Convert department columns to numeric
-    for c in ["Kirurgi","Medicin","Onkologi","Øvrige"]:
-        if c in df.columns:
-            df[c] = pd.to_numeric(df[c], errors="coerce")
-
     df["År"] = pd.to_numeric(df["År"], errors="coerce")
     df["Måned"] = pd.to_numeric(df["Måned"], errors="coerce")
     df = df.dropna(subset=["År","Måned"])
     df["År"] = df["År"].astype(int)
     df["Måned"] = df["Måned"].astype(int)
     df = df[df["Måned"].between(1, 12)]
-
-    # Drop duplicate rows; reset index; sort by time
-    df = df.drop_duplicates().sort_values(["År","Måned"]).reset_index(drop=True)
-    return df
 
 riget_disp_clean_df = clean_beds(riget_disp)
 riget_norm_clean_df = clean_beds(riget_norm)
