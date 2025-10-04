@@ -277,3 +277,5 @@ def plot_department_boxplots(df, title="Beds variation by department"):
 
 plot_department_boxplots(all_hosp_disp, "Available Beds - Boxplot per Department")
 plot_department_boxplots(all_hosp_norm, "Occupied Beds - Boxplot per Department")
+
+
