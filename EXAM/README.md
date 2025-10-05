@@ -25,3 +25,10 @@
 - Can a **classification model** identify months with **high load** (e.g., top-25% 90+ waiting time)?  
   (Evaluated with **confusion matrix**, accuracy/F1.)
 - Do **correlation heatmaps, tree models, clusters,** and **3D visualizations** provide consistent patterns?
+
+- ## Run the Streamlit App
+
+Make sure you are in the project root directory, then run:
+
+```bash
+streamlit run src/app.py
