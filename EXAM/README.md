@@ -27,7 +27,7 @@
 - Do **correlation heatmaps, tree models, clusters,** and **3D visualizations** provide consistent patterns?
 
 
-- ## Run the Streamlit App
+## Run the Streamlit App
 
 Make sure you are in the project root directory, then run:
 
