@@ -15,7 +15,6 @@ def plot_hosp_histogram(
     font_size: int = 16,
     rect: list = [0, 0, 1, 0.96],
     show_skewer: bool = True,
-    show_kde: bool = True
 ):
     if drop_columns:
         hosp_num = hosp.drop(columns=drop_columns, errors="ignore")
@@ -38,9 +37,6 @@ def plot_hosp_histogram(
             median_val = hosp_num[col].median()
             ax.axvline(mean_val, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean_val:.2f}')
             ax.axvline(median_val, color='blue', linestyle='--', linewidth=2, label=f'Median: {median_val:.2f}')
-
-        if show_kde:
-            sns.kdeplot(hosp_num[col], color='green', linewidth=2, ax=ax, label='KDE')
 
         ax.legend(fontsize=10)
 

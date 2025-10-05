@@ -33,7 +33,7 @@ def plot_capacity_over_time(
 
     plt.title(title)
     plt.xlabel("Date (Month-Year)")
-    plt.ylabel("Number of Beds")
+    plt.ylabel(y_cols)
     plt.legend(title=region_col, bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.grid(alpha=0.3)
     plt.tight_layout()
