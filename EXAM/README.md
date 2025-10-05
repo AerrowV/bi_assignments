@@ -2,14 +2,14 @@
 *A Regional and Temporal Analysis Based in 2020-2025* 
 
 # Problem Statement
-**How does the capacity of _surgical_ hospital beds (available/normed) and surgical activity affect waiting times for planned surgery in the five Danish regions?**
+**How does the capacity of _surgical_ hospital beds (available/allocated) and surgical activity affect waiting times for planned surgery in the five Danish regions?**
 
 ---
 
 ## Sub-questions
 
 ### Development over time (surgery)
-- How has the number of **surgically available** and **surgically normed** beds changed over time per region?
+- How has the number of **surgically available** and **surgically allocated** beds changed over time per region?
 - Are there **seasonal fluctuations** in capacity, waiting-time buckets, and number of surgeries?
 
 ### Comparison of regions (surgery)
@@ -25,6 +25,7 @@
 - Can a **classification model** identify months with **high load** (e.g., top-25% 90+ waiting time)?  
   (Evaluated with **confusion matrix**, accuracy/F1.)
 - Do **correlation heatmaps, tree models, clusters,** and **3D visualizations** provide consistent patterns?
+
 
 - ## Run the Streamlit App
 
