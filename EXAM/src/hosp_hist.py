@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 def plot_hosp_histogram(
     hosp: pd.DataFrame,
@@ -13,28 +14,35 @@ def plot_hosp_histogram(
     edgecolor: str = "black",
     font_size: int = 16,
     rect: list = [0, 0, 1, 0.96],
+    show_skewer: bool = True,
+    show_kde: bool = True
 ):
-  
-    # Drop unwanted columns if specified
     if drop_columns:
         hosp_num = hosp.drop(columns=drop_columns, errors="ignore")
     else:
         hosp_num = hosp.copy()
 
-    # Create histograms for all numeric columns
-    axes = hosp_num.hist(color=color, alpha=alpha, edgecolor=edgecolor, bins=20)
+    hosp_num = hosp_num.select_dtypes(include=[np.number])
 
-    # Set overall figure title
+    axes = hosp_num.hist(color=color, alpha=alpha, edgecolor=edgecolor, bins=20)
     plt.suptitle(title, fontsize=font_size)
 
-    # Customize all subplots
-    for row in np.atleast_2d(axes):
-        for ax in row:
-            if ax:
-                ax.set_xlabel(x_label)
-                ax.set_ylabel(y_label)
+    for i, col in enumerate(hosp_num.columns):
+        ax = np.ravel(axes)[i]
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+
+        # Mean/Median vertical lines
+        if show_skewer:
+            mean_val = hosp_num[col].mean()
+            median_val = hosp_num[col].median()
+            ax.axvline(mean_val, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean_val:.2f}')
+            ax.axvline(median_val, color='blue', linestyle='--', linewidth=2, label=f'Median: {median_val:.2f}')
+
+        if show_kde:
+            sns.kdeplot(hosp_num[col], color='green', linewidth=2, ax=ax, label='KDE')
+
+        ax.legend(fontsize=10)
 
     plt.tight_layout(rect=rect)
     plt.show()
-
-
